@@ -8,6 +8,7 @@ definePageMeta({
 const { data } = useAuth();
 const isAdmin = ref(false);
 
+
 watchEffect(() => {
   if (data.value?.user?.role === 'admin') {
     isAdmin.value = true;
