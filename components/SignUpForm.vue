@@ -25,7 +25,6 @@ const handleSignUp = async () => {
 
   try {
     const res = await $api.post('/auth/signup/', form);
-    console.log(res);
   } catch (err) {
     if (err.response && err.response.data) {
       const errorData = err.response.data;
