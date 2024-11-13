@@ -1,9 +1,9 @@
 <script setup lang="js">
 definePageMeta({
-  middleware: "auth"
+  middleware: "private"
 })
 
-import { ref, onMounted } from 'vue';
+import { ref } from 'vue';
 
 const { $api } = useNuxtApp()
 
@@ -27,7 +27,7 @@ try {
         <h1 class="text-2xl text-center font-bold">User List</h1>
 
         <div
-          class="flex flex-col w-full h-full overflow-scroll text-gray-700 bg-white shadow-md rounded-lg bg-clip-border">
+          class="flex flex-col w-full h-full overflow-y-scroll text-gray-700 bg-white shadow-md rounded-lg bg-clip-border">
           <table class="w-full text-left table-auto min-w-max">
             <thead>
               <tr>
@@ -51,11 +51,12 @@ try {
                 </th>
               </tr>
             </thead>
-            <tbody>
-              <!-- Show a loading state or placeholder if data is not yet available -->
-              <tr v-if="users.length === 0">
+            <tbody v-if="users.length === 0">
+              <tr>
                 <td colspan="4" class="p-4 text-center text-slate-800">Loading...</td>
               </tr>
+            </tbody>
+            <tbody v-else>
               <tr v-for="user in users" :key="user.id" class="hover:bg-slate-50">
                 <td class="p-4 border-b border-slate-200">
                   <p class="block text-sm text-slate-800">{{ user.username }}</p>
@@ -67,12 +68,11 @@ try {
                   <p class="block text-sm text-slate-800">{{ user.role }}</p>
                 </td>
                 <td class="p-4 border-b border-slate-200">
-                  <a href="#" class="block text-sm font-semibold text-slate-800">
-                    Edit
-                  </a>
+                  <a href="#" class="block text-sm font-semibold text-slate-800">Edit</a>
                 </td>
               </tr>
             </tbody>
+
           </table>
         </div>
 

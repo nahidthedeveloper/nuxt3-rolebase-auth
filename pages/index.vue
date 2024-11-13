@@ -1,8 +1,8 @@
 <script setup lang="js">
-import { ref, computed, watch } from 'vue';
+import { ref } from 'vue';
 
 definePageMeta({
-  middleware: "auth"
+  middleware: "private"
 });
 
 const { data } = useAuth();

@@ -2,7 +2,7 @@
 import SignUpForm from "~/components/SignUpForm.vue";
 
 // definePageMeta({
-//   middleware: "auth"
+//   middleware: "private"
 // })
 </script>
 

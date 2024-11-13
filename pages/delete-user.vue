@@ -1,6 +1,6 @@
 <script setup lang="js">
 definePageMeta({
-  middleware: "auth"
+  middleware: "private"
 })
 </script>
 <template>

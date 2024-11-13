@@ -2,7 +2,7 @@
 import LoginForm from "~/components/LoginForm.vue";
 
 definePageMeta({
-  middleware: "auth"
+  middleware: "private"
 })
 </script>
 

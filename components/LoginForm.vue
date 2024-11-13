@@ -25,7 +25,6 @@ const handleSignIn = async () => {
       try {
         const errors = JSON.parse(response.error);
         errors.forEach((e) => {
-          console.log(e);
 
           if (e.name === 'username_or_email') {
             error.email_or_username = e.message[0];

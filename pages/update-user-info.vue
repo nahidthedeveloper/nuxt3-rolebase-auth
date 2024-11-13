@@ -4,7 +4,7 @@ import { reactive } from "vue";
 const { $api } = useNuxtApp();
 
 definePageMeta({
-  middleware: "auth"
+  middleware: "private"
 })
 
 const form = reactive({
