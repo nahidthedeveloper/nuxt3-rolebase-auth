@@ -1,4 +1,4 @@
-<script setup lang="js">
+<script setup>
 const {data: users, pending, error, refresh} = await useAsyncData('users', useFetchData('/user/'));
 </script>
 
