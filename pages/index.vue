@@ -1,5 +1,9 @@
 <script setup>
-const {data: users, pending, error, refresh} = await useAsyncData('users', useFetchData('/user/'));
+import {useNuxtApp} from "#app";
+
+const {$apii} = useNuxtApp()
+const {data: users, pending, error, refresh} = await useAsyncData('users', () => $apii('/user/'));
+
 </script>
 
 <template>

@@ -5,7 +5,7 @@ export default defineNuxtConfig({
 
     runtimeConfig: {
         authSecret: process.env.AUTH_SECRET,
-        apiBaseUrl: process.env.API_BASE_URL_SERVER || 'http://localhost:8000',
+        apiBaseUrl: process.env.SERVER_URL || 'http://localhost:8000',
         public: {
             apiBaseUrl: process.env.SERVER_URL || 'http://localhost:8000',
         },
