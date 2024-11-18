@@ -1,8 +1,7 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
     compatibilityDate: '2024-10-09',
-
-    devtools: { enabled: true },
+    devtools: {enabled: true},
 
     runtimeConfig: {
         authSecret: process.env.AUTH_SECRET,
@@ -13,7 +12,6 @@ export default defineNuxtConfig({
     },
 
     ssr: true,
-
     plugins: [
         '~/plugins/axios.js'
     ],
@@ -26,5 +24,5 @@ export default defineNuxtConfig({
         provider: {
             type: 'authjs'
         }
-    },
+    }
 })
