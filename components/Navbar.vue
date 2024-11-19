@@ -25,7 +25,10 @@ const toggle = ref(false)
       <div :class="`${!toggle && 'hidden'} w-full md:block md:w-auto`" id="navbar-default">
         <ul
           class="font-medium flex items-center justify-center mt-3 md:mt-0 border-gray-100 md:flex-row md:space-x-8 md:border-0 dark:border-gray-700">
-          <li v-if="loggedIn">
+          <li v-if="loggedIn" class="flex gap-4">
+            <NuxtLink to="/dashboard" class="text-white">
+              Dashboard
+            </NuxtLink>
             <button class="text-white" @click="signOut()">
               Logout
             </button>

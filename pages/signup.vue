@@ -1,9 +1,6 @@
 <script setup lang="js">
 import SignUpForm from "~/components/SignUpForm.vue";
 
-// definePageMeta({
-//   middleware: "private"
-// })
 </script>
 
 <template>
