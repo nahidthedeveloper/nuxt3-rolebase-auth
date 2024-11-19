@@ -1,6 +1,7 @@
 <script setup>
 import { useNuxtApp } from "#app";
 
+
 const { $api } = useNuxtApp();
 
 
@@ -24,15 +25,25 @@ const { data, pending, error, refresh } = useAsyncData('users', async () => {
 
 
 <template>
-    <button @click="refresh"
-        class=" text-white bg-purple-700 hover:bg-purple-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Re-fetch</button>
-
     <div v-if="pending">Loading...</div>
     <div v-else-if="error">Error: {{ error.message }}</div>
     <div v-else>
         <!-- <div><span class="font-bold">Users:</span> {{ data.users }}</div> -->
         <div><span class="font-bold">Permissions:</span> {{ data.permissions }}</div>
         <div><span class="font-bold">Login User Permission:</span> {{ data.login_user_permissions }}</div>
+    </div>
+
+    <div class="flex justify-between my-6">
+        <h1 class="text-2xl font-bold">All User Information</h1>
+        <div class="flex gap-4">
+            <button @click="refresh"
+                class=" text-white bg-purple-700 hover:bg-purple-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
+                Refresh
+            </button>
+            <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                Add User
+            </button>
+        </div>
     </div>
 
 
@@ -49,7 +60,7 @@ const { data, pending, error, refresh } = useAsyncData('users', async () => {
                     <th scope="col" class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase">
                         Email
                     </th>
-                    <th scope="col" class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase">
+                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase">
                         Action
                     </th>
                 </tr>
@@ -65,7 +76,7 @@ const { data, pending, error, refresh } = useAsyncData('users', async () => {
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800">
                         {{ user.email }}
                     </td>
-                    <td class="px-6 py-4 whitespace-nowrap text-end text-sm font-medium">
+                    <td class="px-6 py-4 whitespace-nowrap text-center text-sm font-medium">
                         <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
                             Edit
                         </button>
