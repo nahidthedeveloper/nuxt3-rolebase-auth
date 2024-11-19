@@ -1,16 +1,12 @@
 <script setup lang="js">
-import { ref } from 'vue';
+import {ref} from 'vue';
 
-const { data } = useAuth();
+const {data} = useAuth();
 const isAdmin = ref(false);
 
 
 watchEffect(() => {
-  if (data.value?.user?.role === 'admin') {
-    isAdmin.value = true;
-  } else {
-    isAdmin.value = false;
-  }
+  isAdmin.value = data.value?.user?.role === 'admin';
 });
 </script>
 
