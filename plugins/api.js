@@ -1,7 +1,7 @@
 export default defineNuxtPlugin((nuxtApp) => {
     const config = useRuntimeConfig();
 
-    const apii = $fetch.create({
+    const api = $fetch.create({
         baseURL: process.server ? config.apiBaseUrl : config.public.apiBaseUrl,
         onRequest({ request, options }) {
 
@@ -29,7 +29,7 @@ export default defineNuxtPlugin((nuxtApp) => {
 
     return {
         provide: {
-            apii,
+            api,
         },
     };
 });

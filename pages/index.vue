@@ -1,8 +1,8 @@
 <script setup>
 import {useNuxtApp} from "#app";
 
-const {$apii} = useNuxtApp()
-const {data: users, pending, error, refresh} = await useAsyncData('users', () => $apii('/user/'));
+const {$api} = useNuxtApp()
+const {data: users, pending, error, refresh} = await useAsyncData('users', () => $api('/user/'));
 
 </script>
 
