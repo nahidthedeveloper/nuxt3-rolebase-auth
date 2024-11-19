@@ -3,6 +3,7 @@ import { useNuxtApp } from "#app";
 
 const { $api } = useNuxtApp();
 
+
 const { data, pending, error, refresh } = useAsyncData('users', async () => {
     try {
         const [users, permissions, login_user_permissions] = await Promise.all([
@@ -17,6 +18,8 @@ const { data, pending, error, refresh } = useAsyncData('users', async () => {
         throw err;
     }
 });
+
+
 </script>
 
 
@@ -46,7 +49,7 @@ const { data, pending, error, refresh } = useAsyncData('users', async () => {
                     <th scope="col" class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase">
                         Email
                     </th>
-                    <th scope="col" class="px-6 py-3 text-end text-xs font-medium text-gray-500 uppercase">
+                    <th scope="col" class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase">
                         Action
                     </th>
                 </tr>
