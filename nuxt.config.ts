@@ -14,7 +14,7 @@ export default defineNuxtConfig({
   ssr: true,
   plugins: ["~/plugins/api.js"],
 
-  modules: ["@sidebase/nuxt-auth", "@nuxtjs/tailwindcss"],
+  modules: ["@sidebase/nuxt-auth", "@nuxt/ui"],
 
   auth: {
     baseURL: process.env.AUTH_ORIGIN,

@@ -11,7 +11,7 @@ watchEffect(() => {
 </script>
 
 <template>
-  <div class="flex flex-col items-center gap-4">
+  <div class="flex flex-col items-center gap-4 text-black">
     <h1 class="text-3xl font-bold">Hello, {{ data.user?.name }}</h1>
     <p>Email: {{ data.user?.email }}</p>
     <p>Role: {{ data.user?.role }}</p>
