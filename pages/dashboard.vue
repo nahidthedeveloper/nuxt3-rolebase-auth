@@ -32,7 +32,7 @@ const permissions = computed(() => {
 });
 
 const all_permissions = computed(() => {
-  return data.value.permissions;
+  return data.value.permissions.permissions;
 })
 </script>
 

@@ -1,32 +1,48 @@
 <script setup lang="js">
 import { defineProps } from 'vue';
-const isOpen = ref(false);
+
 defineProps({
   id: Number
 })
+
+const isOpen = ref(false);
+const deleteUserHandler = () => {
+
+}
 </script>
 
 <template>
   <div>
-    <UButton @click="isOpen = true" color="red" icon="material-symbols:delete-outline" />
+    <!-- Delete Button -->
+    <button @click="isOpen = true" class="bg-red-500 text-white p-2 rounded flex items-center space-x-2">
+      Delete
+    </button>
 
-    <UModal v-model="isOpen" :ui="{ width: 'w-[340px]' }">
-      <div class="p-4 relative">
-        <UButton @click="isOpen = false" icon="gridicons:cross"
-          class="absolute bg-transparent text-2xl top-4 right-4" />
+    <!-- Modal -->
+    <div v-if="isOpen" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+      <div class="bg-white p-6 rounded-lg relative w-[340px]">
+        <!-- Close Button -->
+        <button @click="isOpen = false"
+          class="absolute top-4 right-4 text-2xl text-gray-500 bg-transparent hover:text-black">
+          x
+        </button>
 
+        <!-- Icon -->
         <div class="flex justify-center mb-2">
-          <UIcon name="material-symbols:delete-outline" class="w-14 h-14" />
+          delete icon here
         </div>
+
+        <!-- Confirmation Text -->
         <h1 class="text-center mb-5">
           Are you sure to delete this user? id: {{ id }}
         </h1>
 
+        <!-- Action Buttons -->
         <div class="flex gap-4 justify-center">
-          <UButton @click="isOpen = false" color="blue">Cancel</UButton>
-          <UButton @click="isOpen = false" color="red">Confirm</UButton>
+          <button @click="isOpen = false" class="bg-blue-500 text-white p-2 rounded">Cancel</button>
+          <button @click="deleteUserHandler" class="bg-red-500 text-white p-2 rounded">Confirm</button>
         </div>
       </div>
-    </UModal>
+    </div>
   </div>
 </template>
