@@ -1,6 +1,7 @@
 <script setup>
 import { useNuxtApp } from "#app";
 import { computed } from "vue";
+import CreateUserModal from "~/components/createUserModal.vue";
 import DeleteModal from "~/components/deleteModal.vue";
 import EditModal from "~/components/editModal.vue";
 
@@ -47,10 +48,7 @@ const all_permissions = computed(() => {
   <div v-if="permissions.view">
     <div class="flex justify-between my-6">
       <h1 class="text-2xl font-bold text-black">All User Information</h1>
-      <button v-if="permissions.add"
-        class="text-white bg-purple-700 hover:bg-purple-800 font-medium rounded-lg text-sm px-5 py-2.5">
-        Add User
-      </button>
+      <CreateUserModal v-if="permissions.add" :refresh="refresh"/>
     </div>
 
     <div v-if="pending">Loading...</div>
