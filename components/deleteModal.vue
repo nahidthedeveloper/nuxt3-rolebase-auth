@@ -11,7 +11,7 @@ defineProps({
     <UButton @click="isOpen = true" color="red" icon="material-symbols:delete-outline" />
 
     <UModal v-model="isOpen" :ui="{ width: 'w-[340px]' }">
-      <div class="p-4 h-44 relative">
+      <div class="p-4 relative">
         <UButton @click="isOpen = false" icon="gridicons:cross"
           class="absolute bg-transparent text-2xl top-4 right-4" />
 

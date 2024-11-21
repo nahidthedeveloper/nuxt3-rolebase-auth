@@ -1,6 +1,8 @@
 <script setup>
 import { useNuxtApp } from "#app";
 import { computed } from "vue";
+import DeleteModal from "~/components/deleteModal.vue";
+import EditModal from "~/components/editModal.vue";
 
 const { $api } = useNuxtApp();
 
@@ -28,24 +30,24 @@ const permissions = computed(() => {
     view: log_user_per.some((per) => per.id === 52),
   };
 });
+
+const all_permissions = computed(() => {
+  return data.value.permissions;
+})
 </script>
 
 <template>
   <div class="flex justify-end">
-    <button
-      @click="refresh"
-      class="text-white bg-purple-700 hover:bg-purple-800 font-medium rounded-lg text-sm px-5 py-2.5"
-    >
+    <button @click="refresh"
+      class="text-white bg-purple-700 hover:bg-purple-800 font-medium rounded-lg text-sm px-5 py-2.5">
       Refresh
     </button>
   </div>
   <div v-if="permissions.view">
     <div class="flex justify-between my-6">
       <h1 class="text-2xl font-bold text-black">All User Information</h1>
-      <button
-        v-if="permissions.add"
-        class="text-white bg-purple-700 hover:bg-purple-800 font-medium rounded-lg text-sm px-5 py-2.5"
-      >
+      <button v-if="permissions.add"
+        class="text-white bg-purple-700 hover:bg-purple-800 font-medium rounded-lg text-sm px-5 py-2.5">
         Add User
       </button>
     </div>
@@ -56,37 +58,23 @@ const permissions = computed(() => {
       <table class="min-w-full divide-y divide-gray-200">
         <thead>
           <tr>
-            <th
-              scope="col"
-              class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase"
-            >
+            <th scope="col" class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase">
               No
             </th>
-            <th
-              scope="col"
-              class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase"
-            >
+            <th scope="col" class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase">
               Username
             </th>
-            <th
-              scope="col"
-              class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase"
-            >
+            <th scope="col" class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase">
               Email
             </th>
-            <th
-              scope="col"
-              class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase"
-            >
+            <th scope="col" class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase">
               Action
             </th>
           </tr>
         </thead>
         <tbody class="divide-y divide-gray-200">
           <tr v-for="(user, index) in data.users" :key="index" class="hover:bg-gray-100">
-            <td
-              class="px-6 py-4 text-start whitespace-nowrap text-sm font-medium text-gray-800"
-            >
+            <td class="px-6 py-4 text-start whitespace-nowrap text-sm font-medium text-gray-800">
               {{ index + 1 }}
             </td>
             <td class="px-6 py-4 text-start whitespace-nowrap text-sm text-gray-800">
@@ -95,15 +83,8 @@ const permissions = computed(() => {
             <td class="px-6 py-4 text-start whitespace-nowrap text-sm text-gray-800">
               {{ user.email }}
             </td>
-            <td
-              class="px-6 py-4 whitespace-nowrap text-start text-sm font-medium flex gap-4"
-            >
-              <button
-                v-if="permissions.update"
-                class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-              >
-                Edit
-              </button>
+            <td class="px-6 py-4 whitespace-nowrap text-start text-sm font-medium flex gap-4">
+              <EditModal v-if="permissions.update" :user="user" :permissions="all_permissions" />
               <DeleteModal v-if="permissions.delete" :id="user.id" />
             </td>
           </tr>
