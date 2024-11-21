@@ -6,7 +6,7 @@ defineProps({
 })
 
 const isOpen = ref(false);
-const deleteUserHandler = () => {
+async function deleteUserHandler() {
 
 }
 </script>
