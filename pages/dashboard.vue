@@ -34,6 +34,7 @@ const permissions = computed(() => {
 const all_permissions = computed(() => {
   return data.value.permissions.permissions;
 })
+
 </script>
 
 <template>
@@ -84,8 +85,8 @@ const all_permissions = computed(() => {
               {{ user.email }}
             </td>
             <td class="px-6 py-4 whitespace-nowrap text-start text-sm font-medium flex gap-4">
-              <EditModal v-if="permissions.update" :user="user" :permissions="all_permissions" />
-              <DeleteModal v-if="permissions.delete" :id="user.id" />
+              <EditModal v-if="permissions.update" :user="user" :permissions="all_permissions" :refresh="refresh" />
+              <DeleteModal v-if="permissions.delete" :id="user.id" :refresh="refresh" />
             </td>
           </tr>
         </tbody>

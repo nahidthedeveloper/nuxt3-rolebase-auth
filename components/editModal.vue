@@ -10,15 +10,20 @@ const props = defineProps({
     type: Array,
     required: true,
   },
+  refresh: {
+    type: Function,
+    required: true,
+  },
 });
 
 const isOpen = ref(false);
+const { $api } = useNuxtApp();
 
 const openModal = () => {
   isOpen.value = true;
 
   if (props.user.permissions) {
-    state.selectedPermission = props.user.permissions.map(permission => permission.id);
+    state.permissions = props.user.permissions.map(permission => permission.id);
   }
 }
 
@@ -30,7 +35,7 @@ const state = reactive({
   username: '',
   email: '',
   role: '',
-  selectedPermission: [],
+  permissions: [],
 });
 
 const options = [
@@ -47,12 +52,21 @@ onMounted(() => {
   }
 
   if (props.user.permissions) {
-    state.selectedPermission = props.user.permissions.map(permission => permission.id);
+    state.permissions = props.user.permissions.map(permission => permission.id);
   }
 });
 
-async function onSubmit() {
-  console.log('Submitted State:', state);
+async function onSubmit(userId) {
+  try {
+    const res = await $api(`/user/${userId}/`, {
+      method: 'PATCH',
+      body: state
+    });
+    alert(res.detail);
+    props.refresh()
+  } catch (err) {
+    alert('Failed to delete the user. Please try again later.');
+  }
 }
 </script>
 
@@ -96,7 +110,7 @@ async function onSubmit() {
 
             <div class="flex flex-col">
               <label for="permissions" class="text-sm font-semibold mb-2">Permissions</label>
-              <select v-model="state.selectedPermission" id="permissions" multiple
+              <select v-model="state.permissions" id="permissions" multiple
                 class="border border-gray-300 p-2 rounded">
                 <option v-for="permission in props.permissions" :key="permission.id" :value="permission.id">
                   {{ permission.name }}
@@ -110,7 +124,7 @@ async function onSubmit() {
           <button @click="closeModal" class="bg-blue-500 text-white p-2 rounded">
             Cancel
           </button>
-          <button @click="onSubmit" class="bg-green-500 text-white p-2 rounded" type="submit">
+          <button @click="onSubmit(user.id)" class="bg-green-500 text-white p-2 rounded" type="submit">
             Save
           </button>
         </div>

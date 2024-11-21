@@ -1,14 +1,29 @@
 <script setup lang="js">
 import { defineProps } from 'vue';
 
-defineProps({
-  id: Number
+const props = defineProps({
+  id: Number,
+  refresh: {
+    type: Function,
+    required: true
+  },
 })
 
 const isOpen = ref(false);
-async function deleteUserHandler() {
+const { $api } = useNuxtApp();
 
+async function deleteUserHandler(userId) {
+  try {
+    const res = await $api(`/user/${userId}/`, {
+      method: 'DELETE',
+    });
+    alert(res.detail);
+    props.refresh()
+  } catch (err) {
+    alert('Failed to delete the user. Please try again later.');
+  }
 }
+
 </script>
 
 <template>
@@ -40,7 +55,7 @@ async function deleteUserHandler() {
         <!-- Action Buttons -->
         <div class="flex gap-4 justify-center">
           <button @click="isOpen = false" class="bg-blue-500 text-white p-2 rounded">Cancel</button>
-          <button @click="deleteUserHandler" class="bg-red-500 text-white p-2 rounded">Confirm</button>
+          <button @click="deleteUserHandler(id)" class="bg-red-500 text-white p-2 rounded">Confirm</button>
         </div>
       </div>
     </div>
