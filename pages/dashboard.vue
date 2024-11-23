@@ -3,18 +3,9 @@ import { computed } from "vue";
 import CreateUserModal from "~/components/createUserModal.vue";
 import DeleteModal from "~/components/deleteModal.vue";
 import EditModal from "~/components/editModal.vue";
-
 import { useUsersStore } from "~/stores/userStore";
 
 const usersStore = useUsersStore();
-
-const { error } = await useAsyncData("fetchUsers", async () => {
-  if (!usersStore.userList.length) {
-    await usersStore.fetchUserWithOther();
-  }
-  return usersStore.userList;
-});
-
 
 const permissions = computed(() => {
   const log_user_per = usersStore.userPermissions || [];
@@ -26,15 +17,11 @@ const permissions = computed(() => {
   };
 });
 
-const all_permissions = computed(() => {
-  return usersStore.permissions;
-})
-
 </script> -->
 
 <template>
   <div class="flex justify-end" v-if="permissions.view">
-    <button @click=""
+    <button @click="usersStore.fetchUserWithOther"
       class="text-white bg-purple-700 hover:bg-purple-800 font-medium rounded-lg text-sm px-5 py-2.5">
       Refresh
     </button>
@@ -42,11 +29,11 @@ const all_permissions = computed(() => {
   <div v-if="permissions.view">
     <div class="flex justify-between my-6">
       <h1 class="text-2xl font-bold text-black">All User Information</h1>
-      <CreateUserModal v-if="permissions.add" :refresh="refresh" />
+      <CreateUserModal v-if="permissions.add" :refresh="usersStore.fetchUserWithOther" />
     </div>
 
     <div v-if="usersStore.loading">Loading...</div>
-    <div v-else-if="error">Error: {{ usersStore.error }}</div>
+    <div v-else-if="usersStore.error">Error: {{ usersStore.error }}</div>
     <div v-else class="border overflow-x-auto">
       <table class="min-w-full divide-y divide-gray-200">
         <thead>
@@ -77,8 +64,8 @@ const all_permissions = computed(() => {
               {{ user.email }}
             </td>
             <td class="px-6 py-4 whitespace-nowrap text-start text-sm font-medium flex gap-4">
-              <EditModal v-if="permissions.update" :user="user" :permissions="usersStore.permissions" :refresh="refresh" />
-              <DeleteModal v-if="permissions.delete" :id="user.id" :refresh="refresh" />
+              <EditModal v-if="permissions.update" :user="user" :permissions="usersStore.permissions" :refresh="usersStore.fetchUserWithOther" />
+              <DeleteModal v-if="permissions.delete" :id="user.id" :refresh="usersStore.fetchUserWithOther" />
             </td>
           </tr>
         </tbody>
