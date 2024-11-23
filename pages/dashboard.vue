@@ -1,29 +1,23 @@
 <script setup>
-import { useNuxtApp } from "#app";
 import { computed } from "vue";
 import CreateUserModal from "~/components/createUserModal.vue";
 import DeleteModal from "~/components/deleteModal.vue";
 import EditModal from "~/components/editModal.vue";
 
-const { $api } = useNuxtApp();
+import { useUsersStore } from "~/stores/userStore";
 
-const { data, pending, error, refresh } = useAsyncData("users", async () => {
-  try {
-    const [users, permissions, login_user_permissions] = await Promise.all([
-      $api("/user/"),
-      $api("/user/authentication_permissions/"),
-      $api("/user/login_user_permissions/"),
-    ]);
+const usersStore = useUsersStore();
 
-    return { users, permissions, login_user_permissions };
-  } catch (err) {
-    console.error("Error fetching data:", err);
-    throw err;
+const { error } = await useAsyncData("fetchUsers", async () => {
+  if (!usersStore.userList.length) {
+    await usersStore.fetchUserWithOther();
   }
+  return usersStore.userList;
 });
 
+
 const permissions = computed(() => {
-  const log_user_per = data.value?.login_user_permissions?.user_permissions || [];
+  const log_user_per = usersStore.userPermissions || [];
   return {
     add: log_user_per.some((per) => per.id === 49),
     update: log_user_per.some((per) => per.id === 50),
@@ -33,14 +27,14 @@ const permissions = computed(() => {
 });
 
 const all_permissions = computed(() => {
-  return data.value.permissions.permissions;
+  return usersStore.permissions;
 })
 
-</script>
+</script> -->
 
 <template>
   <div class="flex justify-end" v-if="permissions.view">
-    <button @click="refresh"
+    <button @click=""
       class="text-white bg-purple-700 hover:bg-purple-800 font-medium rounded-lg text-sm px-5 py-2.5">
       Refresh
     </button>
@@ -51,8 +45,8 @@ const all_permissions = computed(() => {
       <CreateUserModal v-if="permissions.add" :refresh="refresh" />
     </div>
 
-    <div v-if="pending">Loading...</div>
-    <div v-else-if="error">Error: {{ error.message }}</div>
+    <div v-if="usersStore.loading">Loading...</div>
+    <div v-else-if="error">Error: {{ usersStore.error }}</div>
     <div v-else class="border overflow-x-auto">
       <table class="min-w-full divide-y divide-gray-200">
         <thead>
@@ -72,7 +66,7 @@ const all_permissions = computed(() => {
           </tr>
         </thead>
         <tbody class="divide-y divide-gray-200">
-          <tr v-for="(user, index) in data.users" :key="index" class="hover:bg-gray-100">
+          <tr v-for="(user, index) in usersStore.userList" :key="index" class="hover:bg-gray-100">
             <td class="px-6 py-4 text-start whitespace-nowrap text-sm font-medium text-gray-800">
               {{ index + 1 }}
             </td>
@@ -83,7 +77,7 @@ const all_permissions = computed(() => {
               {{ user.email }}
             </td>
             <td class="px-6 py-4 whitespace-nowrap text-start text-sm font-medium flex gap-4">
-              <EditModal v-if="permissions.update" :user="user" :permissions="all_permissions" :refresh="refresh" />
+              <EditModal v-if="permissions.update" :user="user" :permissions="usersStore.permissions" :refresh="refresh" />
               <DeleteModal v-if="permissions.delete" :id="user.id" :refresh="refresh" />
             </td>
           </tr>
