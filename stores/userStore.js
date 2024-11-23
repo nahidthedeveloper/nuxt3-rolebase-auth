@@ -7,6 +7,9 @@ export const useUsersStore = defineStore("users", {
     permissions: [],
     loading: true,
     error: null,
+
+    // Sidebar
+    isOpen: false
   }),
 
   actions: {
