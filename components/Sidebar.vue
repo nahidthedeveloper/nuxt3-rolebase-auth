@@ -1,7 +1,9 @@
 <script setup lang="js">
 import { useUsersStore } from "~/stores/userStore";
+import { useRoute } from 'vue-router';
 
 const usersStore = useUsersStore();
+const route = useRoute();
 
 const sideList = [
     {
@@ -24,15 +26,15 @@ const sideList = [
         "name": "Delete User",
         "path": "/user/delete"
     }
-]
-
+];
 </script>
 
 <template>
     <!-- drawer init and show -->
 
     <button type="button" @click="usersStore.isOpen = true">
-        <span v-if="!usersStore.isOpen" :class="{ 'translate-x-0': usersStore.isOpen, '-translate-x-full': !usersStore.isOpen }">
+        <span v-if="!usersStore.isOpen"
+            :class="{ 'translate-x-0': usersStore.isOpen, '-translate-x-full': !usersStore.isOpen }">
             <svg xmlns="http://www.w3.org/2000/svg" id="Layer_1" data-name="Layer 1" color="white" viewBox="0 0 24 24"
                 width="24px" height="24px" fill="currentColor">
                 <path
@@ -59,11 +61,11 @@ const sideList = [
         <div class="py-4 overflow-y-auto">
             <ul class="space-y-2 font-medium">
                 <li v-for="list in sideList" :key="list.id">
-                    <NuxtLink :href="list.path" class="flex items-center p-2  rounded-lg text-white hover:bg-purple-500">
+                    <NuxtLink :href="list.path" class="flex items-center p-2 rounded-lg text-white hover:bg-purple-500"
+                        :class="{ 'bg-purple-500': route.path === list.path }">
                         <span class="ms-3">{{ list.name }}</span>
                     </NuxtLink>
                 </li>
-                <!-- Add more menu items here -->
             </ul>
         </div>
     </div>
