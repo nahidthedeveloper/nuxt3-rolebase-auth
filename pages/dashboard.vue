@@ -39,7 +39,7 @@ const all_permissions = computed(() => {
 </script>
 
 <template>
-  <div class="flex justify-end">
+  <div class="flex justify-end" v-if="permissions.view">
     <button @click="refresh"
       class="text-white bg-purple-700 hover:bg-purple-800 font-medium rounded-lg text-sm px-5 py-2.5">
       Refresh
@@ -48,7 +48,7 @@ const all_permissions = computed(() => {
   <div v-if="permissions.view">
     <div class="flex justify-between my-6">
       <h1 class="text-2xl font-bold text-black">All User Information</h1>
-      <CreateUserModal v-if="permissions.add" :refresh="refresh"/>
+      <CreateUserModal v-if="permissions.add" :refresh="refresh" />
     </div>
 
     <div v-if="pending">Loading...</div>
@@ -91,5 +91,5 @@ const all_permissions = computed(() => {
       </table>
     </div>
   </div>
-  <h1 v-else>You have no permission to view this page.</h1>
+  <h1 v-else class="text-center">You have no permission to view this page.</h1>
 </template>
