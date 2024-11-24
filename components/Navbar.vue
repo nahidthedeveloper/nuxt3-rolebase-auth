@@ -2,6 +2,11 @@
 const { signOut, status, data } = useAuth()
 const loggedIn = computed(() => status.value === 'authenticated')
 const isAdmin = computed(() => data.value.user?.role === 'admin')
+import { useUserPermissionStore } from "~/stores/userPermissionsStore";
+
+const userPermissionsStore = useUserPermissionStore();
+
+const viewPermission = computed(() => userPermissionsStore.userPermissionsList.some(per => per.name == 'todos.view_todos'))
 
 const toggle = ref(false)
 </script>
@@ -10,7 +15,7 @@ const toggle = ref(false)
   <nav class="border-gray-200 bg-purple-700 sticky top-0">
     <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
       <div class="flex justify-center items-center gap-4">
-        <Sidebar />
+        <Sidebar v-if="viewPermission" />
         <NuxtLink to="/" class="text-white text-2xl">
           App
         </NuxtLink>

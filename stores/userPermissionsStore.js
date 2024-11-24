@@ -15,7 +15,7 @@ export const useUserPermissionStore = defineStore("userPermissions", {
 
       try {
         const permissions = await $api("/user/user_permissions/");
-        this.userPermissionsList = permissions;
+        this.userPermissionsList = permissions.user_permissions;
       } catch (err) {
         console.error("Error fetching data:", err);
         this.error = "Failed to fetch user data";

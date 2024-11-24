@@ -1,45 +1,32 @@
-import { useUsersStore } from "~/stores/usersStore";
+import { useUserPermissionStore } from "~/stores/userPermissionsStore";
 
-export default defineNuxtRouteMiddleware((to, from) => {
+export default defineNuxtRouteMiddleware((to) => {
   const { status, data } = useAuth();
   const loggedIn = status.value === "authenticated";
-  const usersStore = useUsersStore();
+  const userPermissionsStore = useUserPermissionStore();
 
-  // const permissions = computed(() => {
-  //   const log_user_per = usersStore.userPermissions || [];
-  //   return {
-  //     add: log_user_per.some((per) => per.id === 49),
-  //     update: log_user_per.some((per) => per.id === 50),
-  //     delete: log_user_per.some((per) => per.id === 51),
-  //     view: log_user_per.some((per) => per.id === 52),
-  //   };
-  // });
+  const hasPermission = (action) => {
+    const permissions = userPermissionsStore.userPermissionsList || [];
+    return permissions.some((perm) => perm.name === `todos.${action}_todos`);
+  };
 
-  const guestOnlyRoutes = ["/login", "/signup"];
-  // const protectedRoutes = {
-  //   "/user/add": permissions.value.add,
-  //   "/user/edit": permissions.value.update,
-  //   "/user/list": permissions.value.view,
-  //   "/user/delete": permissions.value.delete,
-  // };
+  const routes = {
+    guestOnly: ["/login", "/signup"],
+    protected: {
+      "/todos/add": hasPermission("add"),
+      "/todos/edit": hasPermission("change"),
+      "/todos/list": hasPermission("view"),
+      "/todos/delete": hasPermission("delete"),
+    },
+  };
 
   if (loggedIn) {
-    if (guestOnlyRoutes.includes(to.path)) {
+    if (routes.guestOnly.includes(to.path)) return navigateTo("/");
+    if (to.path === "/dashboard" && data.value.user?.role !== "admin")
       return navigateTo("/");
-    }
-    if (
-      to.path === "/dashboard" &&
-      (!data?.value.user || data.value.user.role !== "admin")
-    ) {
+    if (to.path in routes.protected && !routes.protected[to.path])
       return navigateTo("/");
-    }
-
-    // if (protectedRoutes[to.path] !== undefined && !protectedRoutes[to.path]) {
-    //   return navigateTo("/");
-    // }
-  } else {
-    if (!guestOnlyRoutes.includes(to.path)) {
-      return navigateTo("/login");
-    }
+  } else if (!routes.guestOnly.includes(to.path)) {
+    return navigateTo("/login");
   }
 });
