@@ -14,7 +14,15 @@ export default defineNuxtConfig({
   ssr: true,
   plugins: ["~/plugins/api.js"],
 
-  modules: ["@sidebase/nuxt-auth", "@nuxtjs/tailwindcss", "@pinia/nuxt"],
+  modules: [
+    "@sidebase/nuxt-auth",
+    "@nuxtjs/tailwindcss",
+    ["@pinia/nuxt", { autoImports: ["defineStore", "acceptHMRUpdate"] }],
+  ],
+  
+  imports: {
+    dirs: ["stores"],
+  },
 
   auth: {
     baseURL: process.env.AUTH_ORIGIN,

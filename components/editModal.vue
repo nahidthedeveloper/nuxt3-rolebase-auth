@@ -40,7 +40,6 @@ const state = reactive({
 
 const options = [
   { label: 'Admin', value: 'admin' },
-  { label: 'Manager', value: 'manager' },
   { label: 'User', value: 'user' },
 ];
 

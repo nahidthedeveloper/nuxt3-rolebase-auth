@@ -1,35 +1,26 @@
 <script setup>
-import { computed } from "vue";
 import CreateUserModal from "~/components/createUserModal.vue";
 import DeleteModal from "~/components/deleteModal.vue";
 import EditModal from "~/components/editModal.vue";
-import { useUsersStore } from "~/stores/userStore";
+import { useUsersStore } from "~/stores/usersStore";
+import { usePermissionsStore } from "~/stores/permissionsStore";
 
 const usersStore = useUsersStore();
+const permissionsStore = usePermissionsStore()
 
-const permissions = computed(() => {
-  const log_user_per = usersStore.userPermissions || [];
-  return {
-    add: log_user_per.some((per) => per.id === 49),
-    update: log_user_per.some((per) => per.id === 50),
-    delete: log_user_per.some((per) => per.id === 51),
-    view: log_user_per.some((per) => per.id === 52),
-  };
-});
-
-</script> -->
+</script>
 
 <template>
-  <div class="flex justify-end" v-if="permissions.view">
-    <button @click="usersStore.fetchUserWithOther"
+  <div class="flex justify-end">
+    <button @click="usersStore.fetchUsers"
       class="text-white bg-purple-700 hover:bg-purple-800 font-medium rounded-lg text-sm px-5 py-2.5">
       Refresh
     </button>
   </div>
-  <div v-if="permissions.view">
+  <div>
     <div class="flex justify-between my-6">
       <h1 class="text-2xl font-bold text-black">All User Information</h1>
-      <CreateUserModal v-if="permissions.add" :refresh="usersStore.fetchUserWithOther" />
+      <CreateUserModal :refresh="usersStore.fetchUsers" />
     </div>
 
     <div v-if="usersStore.loading">Loading...</div>
@@ -64,13 +55,12 @@ const permissions = computed(() => {
               {{ user.email }}
             </td>
             <td class="px-6 py-4 whitespace-nowrap text-start text-sm font-medium flex gap-4">
-              <EditModal v-if="permissions.update" :user="user" :permissions="usersStore.permissions" :refresh="usersStore.fetchUserWithOther" />
-              <DeleteModal v-if="permissions.delete" :id="user.id" :refresh="usersStore.fetchUserWithOther" />
+              <EditModal :user="user" :permissions="permissionsStore.permissionsList" :refresh="usersStore.fetchUsers" />
+              <DeleteModal :id="user.id" :refresh="usersStore.fetchUsers" />
             </td>
           </tr>
         </tbody>
       </table>
     </div>
   </div>
-  <h1 v-else class="text-center">You have no permission to view this page.</h1>
 </template>

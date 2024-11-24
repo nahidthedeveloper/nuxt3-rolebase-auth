@@ -1,7 +1,15 @@
 <script setup lang="js">
 import { ref, reactive } from 'vue';
+import { useUsersStore } from "~/stores/usersStore";
+import { usePermissionsStore } from "~/stores/permissionsStore";
+import { useUserPermissionStore } from "~/stores/userPermissionsStore";
 
-const { signIn } = useAuth();
+const { signIn, data } = useAuth();
+const usersStore = useUsersStore();
+const permissionsStore = usePermissionsStore()
+const userPermissionsStore = useUserPermissionStore()
+
+const isAdmin = computed(() => data.value.user?.role === 'admin')
 
 const form = ref({
   email_or_username: '',
@@ -16,16 +24,17 @@ const handleSignIn = async () => {
   error.email_or_username = '';
   error.password = '';
 
-  await signIn('credentials', {
-    username: form.value.email_or_username,
-    password: form.value.password,
-    redirect: false
-  }).then((response) => {
+  try {
+    const response = await signIn('credentials', {
+      username: form.value.email_or_username,
+      password: form.value.password,
+      redirect: false,
+    });
+
     if (response?.error) {
       try {
         const errors = JSON.parse(response.error);
         errors.forEach((e) => {
-
           if (e.name === 'username_or_email') {
             error.email_or_username = e.message[0];
           } else if (e.name === 'password') {
@@ -33,13 +42,24 @@ const handleSignIn = async () => {
           }
         });
       } catch (parseError) {
-        console.log(parseError);
+        console.error('Error parsing response:', parseError);
       }
     } else {
+      if (isAdmin.value) {
+        usersStore.fetchUsers()
+        permissionsStore.fetchPermissions()
+      }
+      if (data.value.user && !isAdmin.value) {
+        userPermissionsStore.fetchUserPermissions()
+      }
       navigateTo('/');
     }
-  });
+  } catch (err) {
+    console.error('Sign-in error:', err);
+  }
 };
+
+
 </script>
 
 

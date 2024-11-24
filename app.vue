@@ -1,19 +1,46 @@
-<script setup lang="js">
-import { useUsersStore } from "~/stores/userStore";
+<script setup lang="ts">
+import { useUsersStore } from "~/stores/usersStore";
+import { usePermissionsStore } from "~/stores/permissionsStore";
+import { useUserPermissionStore } from "~/stores/userPermissionsStore";
+import { useRequestHeaders } from "#app";
+
 
 const usersStore = useUsersStore();
+const permissionsStore = usePermissionsStore()
+const userPermissonsStore = useUserPermissionStore()
 
-const { error } = await useAsyncData("fetchUsers", async () => {
-  if (!usersStore.userList.length) {
-    await usersStore.fetchUserWithOther();
-  }
-  return usersStore.userList;
-});
+const headers = useRequestHeaders(["cookie"]);
+const { data: session } = await useAsyncData("session", () =>
+  $fetch("/api/token", {
+    headers,
+  })
+);
+
+const isAdmin = computed(() => session?.value?.role === "admin");
+
+if (session.value && !isAdmin.value) {
+  const { } = await useAsyncData("fetchUserPermission", async () => {
+    await userPermissonsStore.fetchUserPermissions();
+    return userPermissonsStore.userPermissionsList;
+  });
+}
+
+
+if (isAdmin.value) {
+  const { } = await useAsyncData("fetchUsers", async () => {
+    await usersStore.fetchUsers();
+    return usersStore.userList;
+  });
+  const { } = await useAsyncData("fetchPermissions", async () => {
+    await permissionsStore.fetchPermissions();
+    return permissionsStore.permissionsList;
+  });
+}
 
 </script>
 
+
 <template>
-  <!--  dark:bg-gray-900-->
   <div class="bg-gray-50 h-screen w-screen">
     <NuxtLoadingIndicator />
     <Navbar />

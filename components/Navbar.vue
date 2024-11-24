@@ -1,6 +1,7 @@
 <script setup lang="js">
-const { signOut, status } = useAuth()
+const { signOut, status, data } = useAuth()
 const loggedIn = computed(() => status.value === 'authenticated')
+const isAdmin = computed(() => data.value.user?.role === 'admin')
 
 const toggle = ref(false)
 </script>
@@ -29,7 +30,7 @@ const toggle = ref(false)
         <ul
           class="font-medium flex items-center justify-center mt-3 md:mt-0 border-gray-100 md:flex-row md:space-x-8 md:border-0 dark:border-gray-700">
           <li v-if="loggedIn" class="flex gap-4">
-            <NuxtLink to="/dashboard" class="text-white">
+            <NuxtLink to="/dashboard" class="text-white" v-if="isAdmin">
               Dashboard
             </NuxtLink>
             <button class="text-white" @click="signOut()">
