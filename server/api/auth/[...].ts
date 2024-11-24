@@ -23,7 +23,7 @@ export default NuxtAuthHandler({
 
                 try {
                     const response = await fetch(
-                        `${process.env.SERVER_URL}/auth/login/`,
+                        `${runtimeConfig.apiBaseUrl}/auth/login/`,
                         {
                             method: "POST",
                             headers: {
