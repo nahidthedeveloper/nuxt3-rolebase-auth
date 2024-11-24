@@ -16,6 +16,8 @@ const handleTodoDelete = async (id) => {
             alert(res.detail);
             todosStore.fetchTodos()
         }
+        console.log(res.data);
+        
     } catch (err) {
         if (err.data.detail) {
             alert(err.data.detail);
