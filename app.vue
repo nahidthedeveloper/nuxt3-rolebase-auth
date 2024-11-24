@@ -1,11 +1,13 @@
 <script setup lang="ts">
 import { useUsersStore } from "~/stores/usersStore";
+import { useTodosStore } from "~/stores/todosStore";
 import { usePermissionsStore } from "~/stores/permissionsStore";
 import { useUserPermissionStore } from "~/stores/userPermissionsStore";
 import { useRequestHeaders } from "#app";
 
 
 const usersStore = useUsersStore();
+const todosStore = useTodosStore();
 const permissionsStore = usePermissionsStore()
 const userPermissonsStore = useUserPermissionStore()
 
@@ -22,6 +24,10 @@ if (session.value && !isAdmin.value) {
   const { } = await useAsyncData("fetchUserPermission", async () => {
     await userPermissonsStore.fetchUserPermissions();
     return userPermissonsStore.userPermissionsList;
+  });
+  const { } = await useAsyncData("fetchTodos", async () => {
+    await todosStore.fetchTodos();
+    return todosStore.todosList;
   });
 }
 

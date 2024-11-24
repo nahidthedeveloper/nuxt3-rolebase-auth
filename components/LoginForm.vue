@@ -1,11 +1,13 @@
 <script setup lang="js">
 import { ref, reactive } from 'vue';
 import { useUsersStore } from "~/stores/usersStore";
+import { useTodosStore } from "~/stores/todosStore";
 import { usePermissionsStore } from "~/stores/permissionsStore";
 import { useUserPermissionStore } from "~/stores/userPermissionsStore";
 
 const { signIn, data } = useAuth();
 const usersStore = useUsersStore();
+const todosStore = useTodosStore();
 const permissionsStore = usePermissionsStore()
 const userPermissionsStore = useUserPermissionStore()
 
@@ -51,6 +53,7 @@ const handleSignIn = async () => {
       }
       if (data.value.user && !isAdmin.value) {
         userPermissionsStore.fetchUserPermissions()
+        todosStore.fetchTodos()
       }
       navigateTo('/');
     }

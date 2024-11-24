@@ -1,7 +1,9 @@
 <script setup>
 import { useUsersStore } from "~/stores/usersStore";
+import { useTodosStore } from "~/stores/todosStore";
 
 const usersStore = useUsersStore();
+const todosStore = useTodosStore();
 
 </script>
 
@@ -20,23 +22,17 @@ const usersStore = useUsersStore();
                             No
                         </th>
                         <th scope="col" class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase">
-                            Username
-                        </th>
-                        <th scope="col" class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase">
-                            Email
+                            Todo
                         </th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-200">
-                    <tr v-for="(user, index) in usersStore.userList" :key="index" class="hover:bg-gray-100">
+                    <tr v-for="(todo, index) in todosStore.todosList" :key="index" class="hover:bg-gray-100">
                         <td class="px-6 py-4 text-start whitespace-nowrap text-sm font-medium text-gray-800">
                             {{ index + 1 }}
                         </td>
                         <td class="px-6 py-4 text-start whitespace-nowrap text-sm text-gray-800">
-                            {{ user.username }}
-                        </td>
-                        <td class="px-6 py-4 text-start whitespace-nowrap text-sm text-gray-800">
-                            {{ user.email }}
+                            {{ todo.todo }}
                         </td>
                     </tr>
                 </tbody>

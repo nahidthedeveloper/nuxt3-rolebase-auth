@@ -8,23 +8,23 @@ const route = useRoute();
 const sideList = [
     {
         "id": 1,
-        "name": "View User",
-        "path": "/user/list"
+        "name": "View Todos",
+        "path": "/todos/list"
     },
     {
         "id": 2,
-        "name": "Add User",
-        "path": "/user/add"
+        "name": "Add Todos",
+        "path": "/todos/add"
     },
     {
         "id": 3,
-        "name": "Edit User",
-        "path": "/user/edit"
+        "name": "Edit Todos",
+        "path": "/todos/edit"
     },
     {
         "id": 4,
-        "name": "Delete User",
-        "path": "/user/delete"
+        "name": "Delete Todos",
+        "path": "/todos/delete"
     }
 ];
 </script>
