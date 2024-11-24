@@ -1,39 +1,43 @@
 <script setup>
 import { useUsersStore } from "~/stores/usersStore";
+import { useTodosStore } from "~/stores/todosStore";
 import { reactive } from 'vue';
 
 const usersStore = useUsersStore();
+const todosStore = useTodosStore();
 
 const { $api } = useNuxtApp()
 
 const form = reactive({
-    username: '',
-    email: '',
-    password: '',
-    confirm_password: '',
-    role: 'user'
+    todo: ''
 });
 
 const error = reactive({
-    username: '',
-    email: '',
-    password: '',
-    confirm_password: ''
+    todo: ''
 });
 
-const handleSignUp = async () => {
+const handleTodoSubmit = async () => {
     Object.keys(error).forEach((key) => {
         error[key] = "";
     });
 
     try {
-        const res = await $api(`auth/signup/`, {
+        const res = await $api(`/todos/`, {
             method: "POST",
             body: form,
         });
-        alert("Signup successful:", res);
+        if (res.detail) {
+            alert(res.detail);
+            form.todo = ''
+            todosStore.fetchTodos()
+        }
 
     } catch (err) {
+
+        if (err.data.detail) {
+            alert(err.data.detail);
+        }
+
         if (err.data) {
             const errorData = err.data;
             Object.keys(errorData).forEach((key) => {
@@ -47,6 +51,7 @@ const handleSignUp = async () => {
     }
 };
 
+
 </script>
 
 <template>
@@ -56,43 +61,43 @@ const handleSignUp = async () => {
         'grid-cols-4': !usersStore.isOpen
     }">
         <div class="col-auto"></div>
-        <div class="border p-8 col-span-4 mb-8">
-            <form class="space-y-4 md:space-y-6" @submit.prevent="handleSignUp">
+        <div class="border overflow-x-auto col-span-4 mb-8">
+            <form class="my-10 flex w-full justify-center" @submit.prevent="handleTodoSubmit">
                 <div>
-                    <label for="username"
-                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Username</label>
-                    <input type="text" id="username" placeholder="Username" v-model="form.username"
-                        class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
-                    <h6 class="text-red-800 text-sm mt-1 ml-1" v-if="error.username">{{ error.username }}</h6>
+                    <div class="flex gap-6">
+                        <input type="text" id="todo" placeholder="Add todo" v-model="form.todo"
+                            class="w-96 bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block p-2.5" />
+                        <button type="submit"
+                            class="text-white bg-purple-700 hover:bg-purple-800 focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center">
+                            Add Todo
+                        </button>
+                    </div>
+                    <h6 class="text-red-800 text-sm mt-1 ml-1" v-if="error.todo">{{ error.todo }}</h6>
                 </div>
-                <div>
-                    <label for="email"
-                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Email</label>
-                    <input type="text" id="email" placeholder="Email" v-model="form.email"
-                        class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
-                    <h6 class="text-red-800 text-sm mt-1 ml-1" v-if="error.email">{{ error.email }}</h6>
-                </div>
-                <div>
-                    <label for="password"
-                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Password</label>
-                    <input type="password" id="password" placeholder="••••••••" v-model="form.password"
-                        class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
-                    <h6 class="text-red-800 text-sm mt-1 ml-1" v-if="error.password">{{ error.password }}</h6>
-                </div>
-                <div>
-                    <label for="confirm_password"
-                        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Confirm
-                        Password</label>
-                    <input type="password" id="confirm_password" placeholder="••••••••" v-model="form.confirm_password"
-                        class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
-                    <h6 class="text-red-800 text-sm mt-1 ml-1" v-if="error.confirm_password">{{ error.confirm_password
-                        }}</h6>
-                </div>
-                <button type="submit"
-                    class="w-full text-white bg-purple-700 hover:bg-purple-800 focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center">
-                    Sign up
-                </button>
             </form>
+
+            <table class="min-w-full divide-y divide-gray-200">
+                <thead>
+                    <tr>
+                        <th scope="col" class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase">
+                            No
+                        </th>
+                        <th scope="col" class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase">
+                            Todo
+                        </th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-200">
+                    <tr v-for="(todo, index) in todosStore.todosList" :key="index" class="hover:bg-gray-100">
+                        <td class="px-6 py-4 text-start whitespace-nowrap text-sm font-medium text-gray-800">
+                            {{ index + 1 }}
+                        </td>
+                        <td class="px-6 py-4 text-start whitespace-nowrap text-sm text-gray-800">
+                            {{ todo.todo }}
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
     </div>
 </template>
